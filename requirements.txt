@@ -1,0 +1,12 @@
+os
+imgaug
+keras_ocr
+tensorflow
+keras
+numpy
+sklearn
+PIL
+cv2
+fastapi
+pydantic
+typing
