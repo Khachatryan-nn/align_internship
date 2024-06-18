@@ -15,11 +15,13 @@ def load_single_image(image_path):
     image_tf = keras.preprocessing.image.img_to_array(image)
     return image_tf
 
-def extract_id(image_path):
-    image_path = os.path.join(os.getcwd(), image_path)
-    image = load_single_image(image_path)
-    #pipeline = keras_ocr.pipeline.Pipeline()
+def extract_id(image_file):
+    print(image_file)
+    image = load_single_image(image_file)
+    #pipeline = keras_ocr.pipeline.Pipeline(
+        
+    #)
 
     #result = pipeline.recognize([image])
-    result = [[[0]]]
+    result = np.random.randint(low=0, high=100, size=(1, 1, 1))
     return result[0][0][0]

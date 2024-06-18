@@ -26,7 +26,7 @@ async def upload_image(
     remote: bool = Form(...),
     image: UploadFile = File(...)
 ):
-    return extract_id(image.filename)
+    return extract_id(image.file)
 
 #if __name__ == "__main__":
 #    import uvicorn
