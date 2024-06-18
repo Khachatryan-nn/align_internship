@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>EmployeeID Tag</title>
+    </head>
+    <body>
+        <div id="app">
+            <!-- Add form to take employee information -->
+            <form id="employeeForm">
+                <!-- Input field for employee full name -->
+                <input type="text" id="employeeName" placeholder="Employee Name" required>
+                <!-- Input field for employee age -->
+                <input type="number" id="employeeAge" placeholder="Employee Age" required>
+                <!-- Input field for employee position -->
+                <input type="text" id="employeePosition" placeholder="Employee Position" required>
+                <!-- Checkbox for employee status remote or not -->
+                <label for="employeeRemote">Remote</label>
+                <input type="checkbox" id="employeeRemote">
+                <!-- Input for image with employeeId -->
+                <input type="file" id="employeeImage" required>
+                <!-- Button to submit form -->
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+        <script>
+            const employeeForm = document.querySelector('#employeeForm');
+            const employeeName = document.querySelector('#employeeName');
+            const employeeAge = document.querySelector('#employeeAge');
+            const employeePosition = document.querySelector('#employeePosition');
+            const employeeRemote = document.querySelector('#employeeRemote');
+            const employeeImage = document.querySelector('#employeeImage');
+
+            employeeForm.addEventListener('submit', (event) => {
+                event.preventDefault();
+
+                const formData = new FormData();
+                formData.append('name', employeeName.value);
+                formData.append('age', employeeAge.value);
+                formData.append('position', employeePosition.value);
+                formData.append('remote', employeeRemote.checked);
+                formData.append('image', employeeImage.files[0]);
+
+                fetch('/image', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('\n\nPOST WORKED SUCCESSFULLY:\n', data);
+                })
+                .catch(error => console.error('\n\nPOST LITE ERROR Error:\n', error));
+
+                const db = new sqlite3.Database('employees.db');
+                db.run('INSERT INTO employees (name, age, position, remote, image) VALUES (?, ?, ?, ?, ?)', [
+                    employeeName.value,
+                    employeeAge.value,
+                    employeePosition.value,
+                    employeeRemote.checked,
+                    employeeImage.files[0].name
+                ], function(err) {
+                    if (err) {
+                        console.error('\n\nSQL LITE ERROR Error:\n', err.message);
+                    }
+                    console.log('\n\nSQL LITE WORKED SUCCESSFULLY:\n', `Row inserted with ID: ${this.lastID}`);
+                });
+                console.log('worked!');
+            });
+        </script>
+    </body>
+</html>
